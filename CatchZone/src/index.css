@@ -1,4 +1,48 @@
+@import "tailwindcss";
+
 :root {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --color-bg: hsl(0, 0%, 15%);
+  --color-text: hsl(0, 0%, 100%);
+  --color-primary: hsl(200, 100%, 50%);
+  --color-secondary: hsl(340, 80%, 60%);
+}
+
+body {
+  background-color: var(--color-bg);
+  color: hsl(0, 0, 95%);
+  font-family: "Roboto", sans-serif;
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../assets/fonts/roboto-v48-latin-2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  src: url("../assets/fonts/roboto-v48-latin-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 600;
+  src: url("../assets/fonts/roboto-v48-latin-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../assets/fonts/roboto-v48-latin-700.woff2") format("woff2");
 }

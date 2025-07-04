@@ -9,8 +9,8 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Homepage />,
-    loader: async ({params}) => {
-      return fetch(`https://pokeapi.co/api/v2/pokemon/${params.name}`);
+    loader: async () => {
+      return fetch(`https://pokeapi.co/api/v2/`);
     },
   },
   {path: "*", element: <NotFoundPage />},
