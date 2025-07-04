@@ -1,17 +1,21 @@
 import {StrictMode} from "react";
 import {createRoot} from "react-dom/client";
 import "./index.css";
-import Homepage from "./Homepage.tsx";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import NotFoundPage from "./components/NotFoundPage.tsx";
+
+import RootLayout from "./layouts/RootLayout";
+import Homepage from "./pages/Homepage";
+import NotFoundPage from "./pages/NotFoundPage";
+import PokemonDetailPage from "./pages/PokemonDetailPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Homepage />,
-    loader: async () => {
-      return fetch(`https://pokeapi.co/api/v2/`);
-    },
+    element: <RootLayout />,
+    children: [
+      {index: true, element: <Homepage />},
+      {path: "pokemon/:pokemonName", element: <PokemonDetailPage />},
+    ],
   },
   {path: "*", element: <NotFoundPage />},
 ]);

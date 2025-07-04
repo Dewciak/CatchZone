@@ -1,12 +1,9 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import type {Pokemon} from "../pages/Homepage";
+import PokemonCard from "./PokemonCard";
 
-interface Pokemon {
-  name: string;
-}
-
-function Homepage() {
+const PokemonList = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
   useEffect(() => {
@@ -17,15 +14,15 @@ function Homepage() {
   }, []);
   return (
     <div className='max-w-[1200px] mx-auto mt-32'>
-      <ul className='w-full space-y-4 text-(--color-text)'>
+      <ul className='w-full space-y-4 text-(--color-text) flex flex-wrap gap-10  items-center justify-center'>
         {pokemons.map((item, index) => (
-          <li key={index} className='border p-2 rounded-lg'>
-            <Link to={`/${item}`}>{item.name}</Link>
+          <li key={index}>
+            <PokemonCard pokemon={item} />
           </li>
         ))}
       </ul>
     </div>
   );
-}
+};
 
-export default Homepage;
+export default PokemonList;
