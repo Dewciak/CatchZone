@@ -7,7 +7,7 @@ export interface Pokemon {
 
 function Homepage() {
   return (
-    <div className='flex flex-col'>
+    <div className='flex w-full'>
       <PokemonList />
     </div>
   );

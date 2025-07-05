@@ -3,10 +3,12 @@
 :root {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --color-bg: hsl(0, 0%, 15%);
-  --color-text: hsl(0, 0%, 100%);
-  --color-primary: hsl(200, 100%, 50%);
-  --color-secondary: hsl(340, 80%, 60%);
+  --color-bg: hsl(0, 0%, 97%);
+  --color-text: hsl(0, 0%, 0%);
+  --color-primary: hsl(340, 80%, 60%);
+
+  --color-secondary: hsl(200, 100%, 50%);
+  --color-border: #e5e9f1;
 }
 
 body {
