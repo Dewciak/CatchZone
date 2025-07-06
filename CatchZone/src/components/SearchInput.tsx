@@ -6,7 +6,7 @@ const SearchInput = () => {
   if (!context) {
     return null;
   }
-  const {search, setSearch} = context;
+  const {setSearch} = context;
 
   return (
     <input

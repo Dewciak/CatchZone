@@ -15,15 +15,17 @@ function PaginationButton({
   disableIfTargetEqualsCurrent,
   totalPages,
 }: PaginationButtonProps) {
+  const handleClick = () => {
+    onPageChange(targetPage);
+    window.scrollTo({top: 0, behavior: "smooth"});
+  };
   const isDisabled =
     (disableIfTargetEqualsCurrent && targetPage === currentPage) ||
     targetPage < 1 ||
     (totalPages !== undefined && targetPage > totalPages);
   return (
     <button
-      onClick={() => {
-        onPageChange(targetPage);
-      }}
+      onClick={handleClick}
       disabled={isDisabled}
       className={`group px-4 py-2  disabled:opacity-30 flex items-center space-x-2 cursor-pointer 
       ${!isDisabled && "hover:text-[var(--color-primary)]"} 

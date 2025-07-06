@@ -69,33 +69,30 @@ const PokemonList = () => {
     return <FailedApiLoadError />;
   }
 
-  const skeletonsNumber = 21;
-
   if (pokemons.length === 0) {
     return (
-      <div className='w-full h-screen  mt-32 mx-auto 2xl:px-32 px-16 '>
-        <div className='text-2xl bold text-gray-400 flex space-x-2 items-center'>
+      <div className='w-full mx-auto md:mt-48 mt-32 pb-32 max-w-[500px] 2xl:max-w-[1100px] lg:max-w-[700px] text-center md:text-right px-12 md:px-0'>
+        <div className='text-2xl font-semibold text-gray-400 flex space-x-2 items-center justify-center'>
           <span>Loading...</span>
           <div className='w-4 h-4 border-4 border-t-transparent border-[var(--color-primary)] rounded-full animate-spin' />
         </div>
-        <div className='grid grid-cols-1 sm:grid-cols-2 mt-16 md:grid-cols-3  gap-10'>
-          {Array.from({length: 21}, (_, i) => (
+        <div className='grid sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-10 mt-16 place-items-center'>
+          {Array.from({length: pokemonsPerPage}, (_, i) => (
             <CardSkeleton key={i} />
           ))}
         </div>
       </div>
     );
   }
-
   // Main UI
   return (
-    <div className='w-full mx-auto mt-16  pb-32 max-w-[1100px]  '>
-      <span className='text-3xl'>{visiblePokemons.length} Pokemons found</span>
-      <div className='flex  mt-6  h-[50px] items-center text w-full  py-6 justify-between'>
+    <div className='w-full mx-auto md:mt-32 mt-32   pb-32 max-w-[500px] 2xl:max-w-[1100px] lg:max-w-[700px]  text-center md:text-right '>
+      <span className='text-3xl '>{visiblePokemons.length} Pokemons found</span>
+      <div className='flex   mt-6  md:h-[50px] text w-full  py-6 md:justify-between  md:items-center items-start px-12 md:px-0 md:mt-10 flex-col md:flex-row space-y-6'>
         <div className='flex items-center space-x-4 '>
           <span>Selected:</span>
-          {selectedTypes.map((pokemonType) => (
-            <div className='relative'>
+          {selectedTypes.map((pokemonType, index) => (
+            <div className='relative' key={index}>
               <span className='p-2  flex border rounded-md border-[var(--color-border)] text-[#525863] capitalize'>
                 {pokemonType}
               </span>
@@ -108,24 +105,25 @@ const PokemonList = () => {
             </div>
           ))}
         </div>
-        <div className='flex space-x-4  justify-center items-center'>
-          <PokemonPerPageSelect
-            value={pokemonsPerPage}
-            onChange={(value) => {
-              setPokemonsPerPage(value);
-              setCurrentPage(1);
-            }}
-          />
-          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-        </div>
+
+        <PokemonPerPageSelect
+          value={pokemonsPerPage}
+          onChange={(value) => {
+            setPokemonsPerPage(value);
+            setCurrentPage(1);
+          }}
+        />
       </div>
-      <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-10 mt-16'>
+      <ul className='grid sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3  gap-10 mt-10 place-items-center  '>
         {visiblePokemons.map((item, index) => (
           <li key={index}>
             <PokemonCard pokemon={item} />
           </li>
         ))}
       </ul>
+      <div className='mt-24'>
+        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+      </div>
     </div>
   );
 };

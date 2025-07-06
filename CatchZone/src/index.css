@@ -23,7 +23,7 @@ body {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  src: url("../assets/fonts/roboto-v48-latin-2") format("woff2");
+  src: url("../src/assets/fonts/roboto-v48-latin-regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -31,7 +31,7 @@ body {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
-  src: url("../assets/fonts/roboto-v48-latin-500.woff2") format("woff2");
+  src: url("../src/assets/fonts/roboto-v48-latin-500.woff2") format("woff2");
 }
 
 @font-face {
@@ -39,7 +39,7 @@ body {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 600;
-  src: url("../assets/fonts/roboto-v48-latin-600.woff2") format("woff2");
+  src: url("../src/assets/fonts/roboto-v48-latin-600.woff2") format("woff2");
 }
 
 @font-face {
@@ -47,5 +47,5 @@ body {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
-  src: url("../assets/fonts/roboto-v48-latin-700.woff2") format("woff2");
+  src: url("../src/assets/fonts/roboto-v48-latin-700.woff2") format("woff2");
 }

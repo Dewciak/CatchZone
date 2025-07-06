@@ -1,4 +1,4 @@
-import type {Pokemon, Type} from "../types/pokemon";
+import type {Pokemon} from "../types/pokemon";
 import {Link} from "react-router-dom";
 import getTypeColor from "./GetTypeColor";
 
@@ -8,7 +8,10 @@ interface Props {
 
 const PokemonCard = ({pokemon: {name, sprites, types, weight, height, id}}: Props) => {
   return (
-    <Link to={`/pokemon/${name}`} className='flex flex-col items-center  p-2 rounded-lg w-[330px] h-[500px] shadow-xl '>
+    <Link
+      to={`/pokemon/${name}`}
+      className='flex flex-col items-center  p-2 rounded-lg w-[330px] h-[500px] shadow-xl hover:shadow-[0_0_10px_#CBCBCB] duration-300 '
+    >
       <div className='w-full text-right pr-6 pt-6 text-[#A2A2A2] font-semibold'> #{id}</div>
       <div className='flex w-[150px] relative mt-12 h-[150px] items-center justify-center bg-[#F1F1F1] rounded-full'>
         {sprites?.front_default ? (
@@ -24,8 +27,9 @@ const PokemonCard = ({pokemon: {name, sprites, types, weight, height, id}}: Prop
 
       <span className='mt-10 font-bold text-2xl capitalize'> {name}</span>
       <div className='mt-6 font-bold text-md uppercase flex space-x-2'>
-        {types.map((t) => (
+        {types.map((t, index) => (
           <div
+            key={index}
             style={{backgroundColor: getTypeColor(t.type.name)}}
             className='p-2 rounded-[5px] text-[hsla(0,0%,0%,0.8)]'
           >
