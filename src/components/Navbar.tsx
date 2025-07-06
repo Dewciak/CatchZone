@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <nav className='flex justify-between z-10 fixed md:relative w-full md:w-auto'>
       {/* Empty spacer to reserve space for the fixed sidebar on desktop */}
-      <div className='h-screen w-[300px] 2xl:w-[400px] hidden md:block' />
+      <div className='h-[100vh] w-[300px] 2xl:w-[400px] hidden md:block' />
 
       {/* Sidebar navigation (fixed for mobile, static for desktop) */}
       <div
@@ -31,14 +31,14 @@ const Navbar = () => {
           </div>
 
           {/* Sidebar content */}
-          <div className='flex flex-col text-lg font-semibold text-[#474E5A] mt-28 md:mt-6'>
+          <div className='flex flex-col text-lg font-semibold text-[#474E5A] mt-24 md:mt-6'>
             <span>Search Pokemon on a page</span>
 
             <div className='mt-2'>
               <SearchInput />
             </div>
 
-            <div className='mt-6 border-b pb-10 border-[var(--color-border)]'>
+            <div className='mt-6 border-b pb-0 border-[var(--color-border)]'>
               <PokemonTypeFilter />
             </div>
 
