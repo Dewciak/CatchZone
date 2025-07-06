@@ -40,7 +40,7 @@ const PokemonTypeFilter = () => {
       >
         All types
       </button>
-      <div className='flex mt-2 flex-wrap gap-2 2xl:h-[600px] h-[170px] overflow-auto '>
+      <div className='flex mt-2 flex-wrap gap-2 2xl:h-[600px] h-[170px] md:h-[250px] overflow-auto '>
         {types.map((type) => (
           <button
             key={type}
