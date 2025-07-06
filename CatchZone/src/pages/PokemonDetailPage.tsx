@@ -2,6 +2,7 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import type {Pokemon} from "../types/pokemon";
 import {useParams} from "react-router-dom";
+import FailedApiLoadError from "../components/FailedApiLoadError";
 
 const PokemonDetailPage = () => {
   const {pokemonName} = useParams<{pokemonName: string}>();
@@ -10,7 +11,7 @@ const PokemonDetailPage = () => {
 
   useEffect(() => {
     axios
-      .get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+      .get(`https://pokeapi.co/api/v2/pokemsson/${pokemonName}`)
       .then((res) => setPokemon(res.data))
       .catch((err) => {
         console.error("Błąd:", err);
@@ -18,16 +19,15 @@ const PokemonDetailPage = () => {
       });
   }, [pokemonName]);
 
-  if (!pokemon) return <div>Loading...</div>;
+  if (error) {
+    return <FailedApiLoadError />;
+  }
+  if (!pokemon) {
+    return <div className='w-screen h-screen  absolute'>Loading...</div>;
+  }
 
   const {name, abilities, height, moves, stats, types, weight} = pokemon;
 
-  if (!pokemon) {
-    return <div className='w-screen h-screen bg-red-500 absolute'>Loading...</div>;
-  }
-  if (error) {
-    return <div>Błąd</div>;
-  }
   return (
     <div className='max-w-[600px] h-screen  flex items-center flex-col space-y-10 '>
       <p>{name}</p>

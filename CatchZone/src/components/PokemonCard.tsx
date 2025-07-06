@@ -38,7 +38,7 @@ const PokemonCard = ({pokemon: {name, sprites, types, weight, height, id}}: Prop
             className='w-[300px] h-[170px]    absolute object-cover'
           />
         ) : (
-          <span>Brak obrazka</span>
+          <span>No image</span>
         )}
       </div>
 

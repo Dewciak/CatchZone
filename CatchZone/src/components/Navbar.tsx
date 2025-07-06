@@ -8,7 +8,7 @@ const Navbar = () => {
       <div className='h-screen w-[300px] 2xl:w-[400px]' />
       {/* Space Holder for fixed nav ^ */}
       <div className='flex flex-col fixed h-screen w-[300px] 2xl:w-[400px] px-6'>
-        <Link to='/' className=' py-6  z-10 space-y-2  font-bold    '>
+        <Link to='/' className=' py-6  z-10 space-y-2  font-bold cursor-pointer   '>
           <h1 className='text-4xl w-fit bg-[linear-gradient(90deg,#9C0000,#FF0000)] bg-clip-text text-transparent'>
             CatchZone
           </h1>
@@ -27,7 +27,7 @@ const Navbar = () => {
             <div className='flex flex-col space-y-2 '>
               <div className='w-full flex justify-between'>
                 <p className='text-[#474e5ab7]'>Total pokemon:</p>
-                <p className='bg-[var(--color-border)] p-1 rounded-full'>118</p>
+                <p className='bg-[var(--color-border)] p-1 rounded-full'>1302</p>
               </div>
               <div className='w-full flex justify-between'>
                 <p className='text-[#474e5ab7]'>Types:</p>
