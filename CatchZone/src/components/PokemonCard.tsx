@@ -7,26 +7,24 @@ interface Props {
 }
 
 const PokemonCard = ({pokemon: {name, sprites, types, weight, height, id}}: Props) => {
+  const imageUrl =
+    sprites.other?.["official-artwork"]?.front_default || sprites.other?.home?.front_default || sprites.front_default;
   return (
     <Link
       to={`/pokemon/${name}`}
       className='flex flex-col items-center  p-2 rounded-lg w-[330px] h-[500px] shadow-xl hover:shadow-[0_0_10px_#CBCBCB] duration-300 '
     >
       <div className='w-full text-right pr-6 pt-6 text-[#A2A2A2] font-semibold'> #{id}</div>
-      <div className='flex w-[150px] relative mt-12 h-[150px] items-center justify-center bg-[#F1F1F1] rounded-full'>
+      <div className='flex w-[160px] relative mt-12 h-[160px] items-center justify-center bg-[#F1F1F1] rounded-full'>
         {sprites?.front_default ? (
-          <img
-            src={sprites.front_default}
-            alt={`${name} sprite`}
-            className='w-[300px] h-[170px]    absolute object-cover'
-          />
+          <img src={imageUrl} alt={`${name} sprite`} className='w-[300px] h-[170px]    absolute object-cover' />
         ) : (
           <span>No image</span>
         )}
       </div>
 
       <span className='mt-10 font-bold text-2xl capitalize'> {name}</span>
-      <div className='mt-6 font-bold text-md uppercase flex space-x-2'>
+      <div className='mt-6 font-bold text-md capitalize flex space-x-2'>
         {types.map((t, index) => (
           <div
             key={index}

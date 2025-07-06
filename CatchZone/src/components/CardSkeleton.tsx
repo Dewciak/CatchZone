@@ -1,6 +1,6 @@
 const CardSkeleton = () => {
   return (
-    <div className='flex flex-col items-center  p-2 rounded-lg w-[330px] h-[500px] shadow-xl animate-pulse'>
+    <div className='flex flex-col items-center  p-2 rounded-lg w-[330px] h-[500px] shadow-xl animate-pulse '>
       <div className='w-full text-right pr-6 pt-6 text-[#A2A2A2] font-semibold'>#</div>
       <div className='flex w-[150px] relative mt-12 h-[150px] items-center justify-center bg-[#F1F1F1] rounded-full' />
       <span className='mt-10 font-bold text-2xl capitalize w-[100px] h-[40px] bg-[#F1F1F1] rounded-md'> </span>

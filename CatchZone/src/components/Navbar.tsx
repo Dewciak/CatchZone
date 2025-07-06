@@ -46,7 +46,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      <div className='w-full md:hidden  fixed py-4 flex justify-between px-6 items-center backdrop-blur-md'>
+      <div className='w-full md:hidden  fixed py-4 flex justify-between px-6 items-center backdrop-blur-md top-0 left-0'>
         <Logo />
         <button
           onClick={handleMobileNav}

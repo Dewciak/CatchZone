@@ -7,6 +7,7 @@ import Logo from "../components/Logo";
 import {SvgArrow} from "../components/SvgArrow";
 import type {Pokemon} from "../types/pokemon";
 import {StatBar} from "../components/StatBar";
+import Navbar from "../components/Navbar";
 
 const PokemonDetailPage = () => {
   // Get the pokemon name from the URL
@@ -47,15 +48,18 @@ const PokemonDetailPage = () => {
     pokemon.sprites.front_default;
 
   return (
-    <div className='w-full h-screen flex justify-center items-center flex-col '>
+    <div className='w-full md:h-screen flex justify-center items-center flex-col px-12 md:px-0 '>
+      <div className='md:hidden'>
+        <Navbar />
+      </div>
       {/* Logo at the top */}
-      <div className='absolute top-0 left-0 w-full p-6'>
+      <div className='absolute top-0 left-0 w-full p-6 hidden md:block'>
         <Logo />
       </div>
 
-      <div className='flex flex-col md:flex-row max-w-[1150px] w-full items-center'>
+      <div className='flex flex-col-reverse md:flex-row max-w-[1150px] w-full items-center'>
         {/* Left side – details */}
-        <div className='w-[60%] px-12'>
+        <div className='md:w-[60%]  px-0 md:px-12 mt-10 md:mt-0 pb-20 md:pb-0'>
           <div className='flex space-x-3 items-center'>
             {/* Back button */}
             <Link
@@ -72,20 +76,26 @@ const PokemonDetailPage = () => {
 
           {/* Abilities */}
           <h2 className='mt-6'>Abilities</h2>
-          <div className='flex space-x-4 mt-4 text-gray-700'>
+          <div className='flex flex-wrap gap-4 mt-4 text-gray-700'>
             {abilities.map((ability, index) => (
-              <div key={index} className='p-2 bg-gray-200 px-6 font-semibold rounded-lg capitalize'>
-                {ability.ability?.name}
+              <div
+                key={index}
+                className='p-2 bg-gray-200 px-6 font-semibold rounded-lg capitalize flex items-center justify-center '
+              >
+                <p className='whitespace-nowrap'>{ability.ability?.name}</p>
               </div>
             ))}
           </div>
 
           {/* Moves (limited to 3) */}
           <h2 className='mt-6'>Moves</h2>
-          <div className='flex space-x-4 mt-4 text-gray-700'>
+          <div className='flex flex-wrap gap-4 mt-4 text-gray-700'>
             {moves.slice(0, 3).map((move, index) => (
-              <div key={index} className='p-2 bg-gray-200 rounded-lg font-semibold px-6 capitalize'>
-                {move.move?.name}
+              <div
+                key={index}
+                className='p-2 bg-gray-200 rounded-lg font-semibold px-6 capitalize flex items-center justify-center'
+              >
+                <p className='whitespace-nowrap'>{move.move?.name}</p>
               </div>
             ))}
           </div>
@@ -100,7 +110,7 @@ const PokemonDetailPage = () => {
 
         {/* Right side – image and info card */}
         <div
-          className='w-[40%] h-[660px] flex flex-col items-center justify-center rounded-[40px]'
+          className='md:w-[40%] mt-24 md:mt-0 w-full md:h-[660px] flex flex-col items-center justify-center rounded-[40px]'
           style={{
             backgroundImage: `linear-gradient(to bottom, white 40%, ${getTypeColor(types[0].type.name)})`,
           }}
@@ -112,25 +122,27 @@ const PokemonDetailPage = () => {
           <img src={imageUrl} className='w-[60%] max-h-full object-cover mt-6' />
 
           {/* Info card */}
-          <div className='w-full bg-white h-full rounded-[40px] flex items-center justify-center flex-col space-y-4'>
+          <div className='w-full bg-white h-full rounded-[40px] flex items-center justify-center flex-col space-y-4 pb-10 md:pb-0'>
             {/* Pokemon name */}
-            <h1 className='text-xl font-bold capitalize mt-6'>{name}</h1>
 
             {/* Type badges */}
-            <div className='flex space-x-4'>
-              {types.map((t, index) => (
-                <div
-                  key={index}
-                  style={{backgroundColor: getTypeColor(t.type.name)}}
-                  className='p-2 rounded-[5px] text-[hsla(0,0%,0%,0.8)] font-bold text-md uppercase'
-                >
-                  {t.type.name}
-                </div>
-              ))}
+            <div className='flex mt-8 flex-col'>
+              <span className='text-[#A2A2A2] font-semibold text-center md:text-left'>Types</span>
+              <div className='flex space-x-4 mt-4'>
+                {types.map((t, index) => (
+                  <div
+                    key={index}
+                    style={{backgroundColor: getTypeColor(t.type.name)}}
+                    className='py-3 px-5 rounded-[5px] text-[hsla(0,0%,0%,0.8)] font-bold text-md capitalize'
+                  >
+                    {t.type.name}
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Basic info (weight, height, exp, etc.) */}
-            <div className='grid grid-cols-2 gap-y-4 gap-x-12 font-semibold text-center text-gray-700 mt-2'>
+            <div className='grid grid-cols-2 gap-y-4 w-[250px] justify-between font-semibold text-center text-gray-700 mt-2 '>
               <div className='flex flex-col'>
                 <span className='text-[#A2A2A2]'>Weight</span>
                 <span>{(weight / 10).toFixed(1)} kg</span>
