@@ -1,5 +1,5 @@
-import Arrow from "../assets/images/Arrow.webp";
 import PaginationButton from "./PaginationButton";
+import {SvgArrow} from "./SvgArrow";
 
 type Props = {
   currentPage: number;
@@ -17,7 +17,9 @@ const Pagination = ({currentPage, totalPages, onPageChange}: Props) => {
         disableIfTargetEqualsCurrent
         onPageChange={onPageChange}
       >
-        <img src={Arrow} alt='Previous' width={7} className='rotate-180' />
+        <div className='rotate-180'>
+          <SvgArrow />
+        </div>
       </PaginationButton>
       {/* Left Arrow */}
 
@@ -60,8 +62,9 @@ const Pagination = ({currentPage, totalPages, onPageChange}: Props) => {
         currentPage={currentPage}
         disableIfTargetEqualsCurrent
         onPageChange={onPageChange}
+        totalPages={totalPages}
       >
-        <img src={Arrow} alt='Next' width={7} />
+        <SvgArrow />
       </PaginationButton>
     </div>
   );

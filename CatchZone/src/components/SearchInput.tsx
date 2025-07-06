@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {SearchFilterContext} from "../layouts/RootLayout";
+import {SearchFilterContext} from "../pages/Homepage";
 
 const SearchInput = () => {
   const context = useContext(SearchFilterContext);

@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {SearchFilterContext} from "../layouts/RootLayout";
+import {SearchFilterContext} from "../pages/Homepage";
 
 const PokemonTypeFilter = () => {
   const context = useContext(SearchFilterContext);

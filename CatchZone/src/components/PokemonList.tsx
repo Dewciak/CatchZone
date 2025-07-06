@@ -4,10 +4,11 @@ import type {Pokemon} from "../types/pokemon";
 import PokemonCard from "./PokemonCard";
 
 import Close from "../assets/images/close.png";
-import {SearchFilterContext} from "../layouts/RootLayout";
+import {SearchFilterContext} from "../pages/Homepage";
 import FailedApiLoadError from "./FailedApiLoadError";
 import Pagination from "./Pagination";
 import CardSkeleton from "./CardSkeleton";
+import PokemonPerPageSelect from "./PokemonPerPageSelect";
 
 const PokemonList = () => {
   // States for fetching data and error handling
@@ -16,7 +17,7 @@ const PokemonList = () => {
 
   // Pagination States
   const [currentPage, setCurrentPage] = useState(1);
-  const pokemonsPerPage = 21;
+  const [pokemonsPerPage, setPokemonsPerPage] = useState<number>(20);
   const totalPokemons = 1302;
   const totalPages = Math.ceil(totalPokemons / pokemonsPerPage);
   const offset = (currentPage - 1) * pokemonsPerPage;
@@ -32,7 +33,7 @@ const PokemonList = () => {
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
-        const res = await axios.get(`https://pokeapi.co/api/v2/pokem2on?limit=${pokemonsPerPage}&offset=${offset}`);
+        const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${pokemonsPerPage}&offset=${offset}`);
         const detailed = await Promise.all(
           res.data.results.map((item: {url: string}) => axios.get(item.url).then((res) => res.data))
         );
@@ -44,7 +45,7 @@ const PokemonList = () => {
     };
 
     fetchPokemons();
-  }, [currentPage]);
+  }, [currentPage, pokemonsPerPage]);
 
   // Filter Pokémon list by search query and exact type match (0–2 types)
   const visiblePokemons = pokemons.filter((item) => {
@@ -64,9 +65,9 @@ const PokemonList = () => {
   // Handle type selection (max 2 types can be selected)
 
   // Show loading or error messages
-  // if (error) {
-  //   return <FailedApiLoadError />;
-  // }
+  if (error) {
+    return <FailedApiLoadError />;
+  }
 
   const skeletonsNumber = 21;
 
@@ -88,7 +89,7 @@ const PokemonList = () => {
 
   // Main UI
   return (
-    <div className='w-full mx-auto mt-16 2xl:px-32 px-16 pb-32'>
+    <div className='w-full mx-auto mt-16  pb-32 max-w-[1100px]  '>
       <span className='text-3xl'>{visiblePokemons.length} Pokemons found</span>
       <div className='flex  mt-6  h-[50px] items-center text w-full  py-6 justify-between'>
         <div className='flex items-center space-x-4 '>
@@ -107,7 +108,16 @@ const PokemonList = () => {
             </div>
           ))}
         </div>
-        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        <div className='flex space-x-4  justify-center items-center'>
+          <PokemonPerPageSelect
+            value={pokemonsPerPage}
+            onChange={(value) => {
+              setPokemonsPerPage(value);
+              setCurrentPage(1);
+            }}
+          />
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        </div>
       </div>
       <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-10 mt-16'>
         {visiblePokemons.map((item, index) => (

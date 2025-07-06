@@ -1,8 +1,6 @@
-import React from "react";
-
 const CardSkeleton = () => {
   return (
-    <div className='flex flex-col items-center  p-2 rounded-lg w-[330px] h-[500px] shadow-xl '>
+    <div className='flex flex-col items-center  p-2 rounded-lg w-[330px] h-[500px] shadow-xl animate-pulse'>
       <div className='w-full text-right pr-6 pt-6 text-[#A2A2A2] font-semibold'> ID</div>
       <div className='flex w-[150px] relative mt-12 h-[150px] items-center justify-center bg-[#F1F1F1] rounded-full'>
         <div className='w-[300px] h-[170px] bg-gray-200    absolute object-cover' />

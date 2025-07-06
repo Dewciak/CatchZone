@@ -1,23 +1,15 @@
 import {StrictMode} from "react";
 import {createRoot} from "react-dom/client";
 import "./index.css";
+import Homepage from "./pages/Homepage.tsx";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-
-import RootLayout from "./layouts/RootLayout";
-import Homepage from "./pages/Homepage";
-import NotFoundPage from "./pages/NotFoundPage";
-import PokemonDetailPage from "./pages/PokemonDetailPage";
+import NotFoundPage from "./pages/NotFoundPage.tsx";
+import PokemonDetailPage from "./pages/PokemonDetailPage.tsx";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout />,
-    children: [
-      {index: true, element: <Homepage />},
-      {path: "pokemon/:pokemonName", element: <PokemonDetailPage />},
-    ],
-  },
+  {path: "/", element: <Homepage />},
   {path: "*", element: <NotFoundPage />},
+  {path: "/pokemon/:pokemonName", element: <PokemonDetailPage />},
 ]);
 
 createRoot(document.getElementById("root")!).render(
