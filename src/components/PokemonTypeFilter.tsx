@@ -31,7 +31,7 @@ const PokemonTypeFilter = () => {
 
   return (
     <div className='flex flex-col'>
-      <span>Filter by Type</span>
+      <span>Filter page by type</span>
       <button
         onClick={() => handleTypeButton("All types")}
         className={`p-3 border text-left capitalize border-[#E5E9F1] rounded-md w-full mt-2  ${

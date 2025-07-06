@@ -18,9 +18,9 @@ const PokemonList = () => {
   // Pagination States
   const [currentPage, setCurrentPage] = useState(1);
   const [pokemonsPerPage, setPokemonsPerPage] = useState<number>(20);
-  const [totalMatchingPokemons, setTotalMatchingPokemons] = useState<number>(1302);
 
-  const totalPages = Math.ceil(totalMatchingPokemons / pokemonsPerPage);
+  const totalPokemons = 1302;
+  const totalPages = Math.ceil(totalPokemons / pokemonsPerPage);
 
   const offset = (currentPage - 1) * pokemonsPerPage;
 
@@ -29,7 +29,7 @@ const PokemonList = () => {
   if (!context) {
     return null;
   }
-  const {search, selectedTypes, setSelectedTypes} = context;
+  const {search, selectedTypes, setSelectedTypes} = context || {};
 
   // Fetch full data of 100 Pokemons on initial load
   useEffect(() => {
@@ -64,14 +64,6 @@ const PokemonList = () => {
     return nameMatch && matchesTypes;
   });
 
-  useEffect(() => {
-    if (selectedTypes.includes("All types")) {
-      setTotalMatchingPokemons(1302); // full dex
-    } else {
-      setTotalMatchingPokemons(visiblePokemons.length);
-    }
-  }, [visiblePokemons, selectedTypes]);
-
   // Show loading or error messages
   if (error) {
     return <FailedApiLoadError />;
@@ -83,7 +75,7 @@ const PokemonList = () => {
   // Main UI
   return (
     <div className='w-full relative mx-auto md:mt-32 mt-32   pb-32 max-w-[500px] 2xl:max-w-[1100px] lg:max-w-[700px]  text-center md:text-right '>
-      <span className='text-3xl '>{visiblePokemons.length} Pokemons found</span>
+      <span className='text-2xl '>{visiblePokemons.length} matching Pokemons found on this page</span>
       <div className='flex   mt-6  md:h-[50px] text w-full  py-6 md:justify-between  md:items-center items-start px-12 md:px-0 md:mt-10 flex-col md:flex-row space-y-6'>
         <div className='flex items-center space-x-4 '>
           <span>Selected:</span>
@@ -117,9 +109,11 @@ const PokemonList = () => {
           </li>
         ))}
       </ul>
-      <div className='mt-24'>
-        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-      </div>
+      {selectedTypes.length !== 0 && (
+        <div className='mt-24'>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        </div>
+      )}
     </div>
   );
 };

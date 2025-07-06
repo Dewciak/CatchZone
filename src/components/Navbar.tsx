@@ -32,7 +32,7 @@ const Navbar = () => {
 
           {/* Sidebar content */}
           <div className='flex flex-col text-lg font-semibold text-[#474E5A] mt-28 md:mt-6'>
-            <span>Search Pokemon</span>
+            <span>Search Pokemon on a page</span>
 
             <div className='mt-2'>
               <SearchInput />
