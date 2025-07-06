@@ -1,13 +1,12 @@
 import axios from "axios";
 import {useContext, useEffect, useState} from "react";
 import type {Pokemon} from "../types/pokemon";
-import PokemonCard from "./PokemonCard";
+import PokemonListCard from "./PokemonListCard";
 
 import Close from "../assets/images/close.png";
 import {SearchFilterContext} from "../pages/Homepage";
 import FailedApiLoadError from "./FailedApiLoadError";
 import Pagination from "./Pagination";
-import CardSkeleton from "./CardSkeleton";
 import PokemonPerPageSelect from "./PokemonPerPageSelect";
 import ListSkeleton from "./ListSkeleton";
 
@@ -19,8 +18,10 @@ const PokemonList = () => {
   // Pagination States
   const [currentPage, setCurrentPage] = useState(1);
   const [pokemonsPerPage, setPokemonsPerPage] = useState<number>(20);
-  const totalPokemons = 1302;
-  const totalPages = Math.ceil(totalPokemons / pokemonsPerPage);
+  const [totalMatchingPokemons, setTotalMatchingPokemons] = useState<number>(1302);
+
+  const totalPages = Math.ceil(totalMatchingPokemons / pokemonsPerPage);
+
   const offset = (currentPage - 1) * pokemonsPerPage;
 
   // Context for filtering and searching
@@ -30,7 +31,7 @@ const PokemonList = () => {
   }
   const {search, selectedTypes, setSelectedTypes} = context;
 
-  // Fetch full data of 100 Pokémons on initial load
+  // Fetch full data of 100 Pokemons on initial load
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
@@ -63,7 +64,13 @@ const PokemonList = () => {
     return nameMatch && matchesTypes;
   });
 
-  // Handle type selection (max 2 types can be selected)
+  useEffect(() => {
+    if (selectedTypes.includes("All types")) {
+      setTotalMatchingPokemons(1302); // full dex
+    } else {
+      setTotalMatchingPokemons(visiblePokemons.length);
+    }
+  }, [visiblePokemons, selectedTypes]);
 
   // Show loading or error messages
   if (error) {
@@ -106,7 +113,7 @@ const PokemonList = () => {
       <ul className='grid sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3  gap-10 mt-10 place-items-center  '>
         {visiblePokemons.map((item, index) => (
           <li key={index}>
-            <PokemonCard pokemon={item} />
+            <PokemonListCard pokemon={item} />
           </li>
         ))}
       </ul>

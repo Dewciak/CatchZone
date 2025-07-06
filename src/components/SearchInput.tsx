@@ -6,14 +6,21 @@ const SearchInput = () => {
   if (!context) {
     return null;
   }
-  const {setSearch} = context;
+  const {setSearch, selectedTypes, setSelectedTypes} = context;
 
   return (
     <input
       type='text'
       className='py-3 w-full bg-white text-black px-2 border  rounded-md border-[#E5E9F1]'
       placeholder='🔍  Search pokemon name...'
-      onChange={(e) => setSearch(e.target.value)}
+      onChange={(e) => {
+        const value = e.target.value;
+        setSearch(value);
+
+        if (selectedTypes.length === 0 && value.trim() !== "") {
+          setSelectedTypes(["All types"]);
+        }
+      }}
     />
   );
 };

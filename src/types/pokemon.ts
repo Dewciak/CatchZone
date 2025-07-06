@@ -11,7 +11,7 @@ export interface Pokemon {
   name: string;
   order: number;
   past_abilities: PastAbility[];
-  past_types: any[];
+
   species: Species;
   sprites: Sprites;
   stats: Stat[];

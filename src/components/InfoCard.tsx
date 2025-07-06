@@ -18,7 +18,7 @@ const InfoCard = ({id, imageUrl, types, weight, height, base_experience, movesCo
       style={{backgroundImage: `linear-gradient(to bottom, white 40%, ${getTypeColor(types[0].type.name)})`}}
     >
       <span className='font-semibold text-xl mt-6'>#{id}</span>
-      <img src={imageUrl} className='w-[60%] max-h-full object-cover mt-6' />
+      <img loading='eager' src={imageUrl} className='w-[60%] max-h-full object-cover mt-6' />
 
       <div className='w-full bg-white h-full rounded-[40px] flex items-center justify-center flex-col space-y-4 pb-10 md:pb-0'>
         <div className='flex mt-8 flex-col'>
@@ -39,7 +39,7 @@ const InfoCard = ({id, imageUrl, types, weight, height, base_experience, movesCo
         <div className='grid grid-cols-2 gap-y-4 w-[250px] justify-between font-semibold text-center text-gray-700 mt-2'>
           <div className='flex flex-col'>
             <span className='text-[#A2A2A2]'>Weight</span>
-            <span>{(weight / 10).toFixed(1)} kg</span>
+            <span>{(weight / 100).toFixed(1)} kg</span>
           </div>
           <div className='flex flex-col'>
             <span className='text-[#A2A2A2]'>Height</span>

@@ -1,6 +1,6 @@
-import SearchInput from "./SearchInput";
-import PokemonTypeFilter from "./PokemonTypeFilter";
 import Logo from "./Logo";
+import PokemonTypeFilter from "./PokemonTypeFilter";
+import SearchInput from "./SearchInput";
 
 import {useState} from "react";
 import HamburgerButton from "./HamburgerButton";

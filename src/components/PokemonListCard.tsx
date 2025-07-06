@@ -1,12 +1,12 @@
-import type {Pokemon} from "../types/pokemon";
 import {Link} from "react-router-dom";
+import type {Pokemon} from "../types/pokemon";
 import getTypeColor from "./GetTypeColor";
 
 interface Props {
   pokemon: Pokemon;
 }
 
-const PokemonCard = ({pokemon: {name, sprites, types, weight, height, id}}: Props) => {
+const PokemonListCard = ({pokemon: {name, sprites, types, weight, height, id}}: Props) => {
   const imageUrl =
     sprites.other?.["official-artwork"]?.front_default || sprites.other?.home?.front_default || sprites.front_default;
   return (
@@ -17,7 +17,12 @@ const PokemonCard = ({pokemon: {name, sprites, types, weight, height, id}}: Prop
       <div className='w-full text-right pr-6 pt-6 text-[#A2A2A2] font-semibold'> #{id}</div>
       <div className='flex w-[160px] relative mt-12 h-[160px] items-center justify-center bg-[#F1F1F1] rounded-full'>
         {sprites?.front_default ? (
-          <img src={imageUrl} alt={`${name} sprite`} className='w-[300px] h-[170px]    absolute object-cover' />
+          <img
+            loading='lazy'
+            src={imageUrl}
+            alt={`${name} sprite`}
+            className='w-[300px] h-[170px]    absolute object-cover'
+          />
         ) : (
           <span>No image</span>
         )}
@@ -38,7 +43,7 @@ const PokemonCard = ({pokemon: {name, sprites, types, weight, height, id}}: Prop
       <div className='flex items-center justify-center space-x-6 mt-6 font-semibold'>
         <div className='flex flex-col text-center '>
           <span className='text-[#A2A2A2]'>Weight </span>
-          <span className='text-[#5D5D5D]'> {weight} kg</span>
+          <span className='text-[#5D5D5D]'>{(weight / 10).toFixed(1)} kg</span>
         </div>
         <div className='flex flex-col text-center'>
           <span className='text-[#A2A2A2]'>height </span>
@@ -49,4 +54,4 @@ const PokemonCard = ({pokemon: {name, sprites, types, weight, height, id}}: Prop
   );
 };
 
-export default PokemonCard;
+export default PokemonListCard;

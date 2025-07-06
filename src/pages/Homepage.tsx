@@ -9,6 +9,8 @@ interface SearchFilterContextType {
   selectedTypes: string[];
   setSelectedTypes: React.Dispatch<React.SetStateAction<string[]>>;
   handleTypeButton: (value: string) => void;
+  visibleCount: number;
+  setVisibleCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const SearchFilterContext = createContext<SearchFilterContextType | undefined>(undefined);
@@ -16,6 +18,7 @@ export const SearchFilterContext = createContext<SearchFilterContextType | undef
 function Homepage() {
   const [search, setSearch] = useState<string | undefined>();
   const [selectedTypes, setSelectedTypes] = useState<string[]>(["All types"]);
+  const [visibleCount, setVisibleCount] = useState<number>(0);
 
   const handleTypeButton = (type: string) => {
     setSelectedTypes((prev) => {
@@ -37,7 +40,17 @@ function Homepage() {
   };
   return (
     <div className='flex w-full relative'>
-      <SearchFilterContext.Provider value={{search, setSearch, selectedTypes, setSelectedTypes, handleTypeButton}}>
+      <SearchFilterContext.Provider
+        value={{
+          search,
+          setSearch,
+          selectedTypes,
+          setSelectedTypes,
+          handleTypeButton,
+          visibleCount,
+          setVisibleCount,
+        }}
+      >
         <Navbar />
         <div className='flex flex-col w-full relative max-w-[500px] 2xl:max-w-[1100px] lg:max-w-[700px] mx-auto px-4'>
           <main>
