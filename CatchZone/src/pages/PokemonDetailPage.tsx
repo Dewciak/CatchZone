@@ -8,6 +8,8 @@ import {SvgArrow} from "../components/SvgArrow";
 import type {Pokemon} from "../types/pokemon";
 import {StatBar} from "../components/StatBar";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import DetailPageSkeleton from "../components/DetailPageSkeleton";
 
 const PokemonDetailPage = () => {
   // Get the pokemon name from the URL
@@ -29,14 +31,16 @@ const PokemonDetailPage = () => {
   }, [pokemonName]);
 
   // Show error if fetch failed
+
+  if (!pokemon) {
+    return <DetailPageSkeleton />;
+  }
+
   if (error) {
     return <FailedApiLoadError />;
   }
 
   // Show loading screen while data is being fetched
-  if (!pokemon) {
-    return <div className='w-screen h-screen absolute'>Loading...</div>;
-  }
 
   // Destructure the Pokemon data
   const {name, abilities, height, moves, stats, types, weight, id, base_experience} = pokemon;
@@ -48,7 +52,7 @@ const PokemonDetailPage = () => {
     pokemon.sprites.front_default;
 
   return (
-    <div className='w-full md:h-screen flex justify-center items-center flex-col px-12 md:px-0 '>
+    <div className='w-full md:h-screen flex justify-center items-center flex-col px-12 md:px-0 pb-20 relative'>
       <div className='md:hidden'>
         <Navbar />
       </div>
@@ -163,6 +167,7 @@ const PokemonDetailPage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

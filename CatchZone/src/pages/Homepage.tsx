@@ -1,3 +1,4 @@
+import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import PokemonList from "../components/PokemonList";
 import {createContext, useState} from "react";
@@ -35,10 +36,15 @@ function Homepage() {
     });
   };
   return (
-    <div className='flex w-full'>
+    <div className='flex w-full relative'>
       <SearchFilterContext.Provider value={{search, setSearch, selectedTypes, setSelectedTypes, handleTypeButton}}>
         <Navbar />
-        <PokemonList />
+        <div className='flex flex-col w-full relative max-w-[500px] 2xl:max-w-[1100px] lg:max-w-[700px] mx-auto px-4'>
+          <main>
+            <PokemonList />
+          </main>
+          <Footer />
+        </div>
       </SearchFilterContext.Provider>
     </div>
   );

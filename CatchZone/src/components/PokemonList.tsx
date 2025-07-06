@@ -86,7 +86,7 @@ const PokemonList = () => {
   }
   // Main UI
   return (
-    <div className='w-full mx-auto md:mt-32 mt-32   pb-32 max-w-[500px] 2xl:max-w-[1100px] lg:max-w-[700px]  text-center md:text-right '>
+    <div className='w-full relative mx-auto md:mt-32 mt-32   pb-32 max-w-[500px] 2xl:max-w-[1100px] lg:max-w-[700px]  text-center md:text-right '>
       <span className='text-3xl '>{visiblePokemons.length} Pokemons found</span>
       <div className='flex   mt-6  md:h-[50px] text w-full  py-6 md:justify-between  md:items-center items-start px-12 md:px-0 md:mt-10 flex-col md:flex-row space-y-6'>
         <div className='flex items-center space-x-4 '>
