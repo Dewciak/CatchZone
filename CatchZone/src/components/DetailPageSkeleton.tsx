@@ -25,7 +25,10 @@ const DetailPageSkeleton = () => {
               </div>
             </div>
             {/* Pokemon name */}
-            <h1 className='mt-0 font-bold text-3xl capitalize'>name</h1>
+            <div className='text-2xl font-semibold text-gray-400 flex space-x-2 items-center justify-center'>
+              <span>Loading...</span>
+              <div className='w-4 h-4 border-4 border-t-transparent border-[var(--color-primary)] rounded-full animate-spin' />
+            </div>
           </div>
 
           {/* Abilities */}
