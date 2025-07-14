@@ -1,94 +1,139 @@
 import axios from "axios";
-import {useContext, useEffect, useState} from "react";
-import type {Pokemon} from "../types/pokemon";
-import PokemonListCard from "./PokemonListCard";
+import {useContext, useEffect, useMemo, useRef, useState} from "react";
 
+// Components
+import PokemonListCard from "./PokemonListCard";
 import Close from "../assets/images/close.png";
-import {SearchFilterContext} from "../pages/Homepage";
 import FailedApiLoadError from "./FailedApiLoadError";
 import Pagination from "./Pagination";
 import PokemonPerPageSelect from "./PokemonPerPageSelect";
 import ListSkeleton from "./ListSkeleton";
 
+// Contexts
+import {SearchFilterContext} from "../pages/Homepage";
+import {usePokemonContext} from "./PokemonContext";
+
+// Types
+type PartialPokemon = {
+  name: string;
+  types: string[];
+  sprite: string;
+};
+
 const PokemonList = () => {
-  // States for fetching data and error handling
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [error, setError] = useState<boolean>(false);
+  const {pokemons, setPokemons} = usePokemonContext();
+  const fetched = useRef<PartialPokemon[]>([]);
 
-  // Pagination States
+  // Pagination and error state
+  const [error, setError] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pokemonsPerPage, setPokemonsPerPage] = useState<number>(20);
-
-  const totalPokemons = 1302;
-  const totalPages = Math.ceil(totalPokemons / pokemonsPerPage);
-
+  const [pokemonsPerPage, setPokemonsPerPage] = useState(20);
   const offset = (currentPage - 1) * pokemonsPerPage;
 
-  // Context for filtering and searching
+  // Search/filter context from Homepage
   const context = useContext(SearchFilterContext);
-  if (!context) {
-    return null;
-  }
-  const {search, selectedTypes, setSelectedTypes} = context || {};
+  if (!context) return null;
+  const {search, selectedTypes, setSelectedTypes} = context;
 
-  // Fetch full data of 100 Pokemons on initial load
+  // Fetch all Pokémon data only once
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
-        const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${pokemonsPerPage}&offset=${offset}`);
-        const detailed = await Promise.all(
-          res.data.results.map((item: {url: string}) => axios.get(item.url).then((res) => res.data))
+        // 1. Jeśli już mamy dane – nie pobieraj ponownie
+        if (pokemons.length > 0) return;
+
+        // 2. Pobierz pierwsze 20
+        const initialRes = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=20&offset=0");
+        const initialDetailed: PartialPokemon[] = await Promise.all(
+          initialRes.data.results.map((item: {url: string}) =>
+            axios.get(item.url).then((res) => ({
+              name: res.data.name,
+              types: res.data.types.map((t: any) => t.type.name),
+              sprite:
+                res.data.sprites.other?.["official-artwork"]?.front_default ||
+                res.data.sprites.other?.home?.front_default ||
+                res.data.sprites.front_default,
+            }))
+          )
         );
-        setPokemons(detailed);
+
+        fetched.current = initialDetailed;
+        setPokemons(initialDetailed); // natychmiast wyświetl
+
+        // 3. Pobierz pozostałe w tle
+        const countRes = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=1");
+        const maxPokemons = countRes.data.count;
+
+        for (let offset = 20; offset < maxPokemons; offset += 100) {
+          const batchRes = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=100&offset=${offset}`);
+          const batchDetailed: PartialPokemon[] = await Promise.all(
+            batchRes.data.results.map((item: {url: string}) =>
+              axios.get(item.url).then((res) => ({
+                name: res.data.name,
+                types: res.data.types.map((t: any) => t.type.name),
+                sprite: res.data.sprites.front_default,
+              }))
+            )
+          );
+
+          fetched.current = [...fetched.current, ...batchDetailed];
+          setPokemons([...fetched.current]); // aktualizuj na bieżąco
+        }
       } catch (err) {
-        console.error("Błąd:", err);
+        console.error("Error while fetching Pokémons:", err);
         setError(true);
       }
     };
 
     fetchPokemons();
-  }, [currentPage, pokemonsPerPage]);
+  }, [pokemons.length, setPokemons]);
 
-  // Filter Pokémon list by search query and exact type match (0–2 types)
-  const visiblePokemons = pokemons.filter((item) => {
-    const nameMatch = item.name.toLowerCase().includes(search?.toLowerCase() || "");
-    const pokemonTypes = item.types.map((t) => t.type.name);
+  // Filter Pokémons based on name and types
+  const filteredPokemons = useMemo(() => {
+    return pokemons.filter((item) => {
+      const nameMatch = item.name.toLowerCase().includes(search?.toLowerCase() || "");
 
-    if (selectedTypes.includes("All types")) {
-      return nameMatch; // jeśli "All types", filtruj tylko po nazwie
-    }
+      const matchesTypes = selectedTypes.includes("All types")
+        ? true
+        : selectedTypes.length === 0
+        ? false
+        : selectedTypes.every((type) => item.types.includes(type));
 
-    if (selectedTypes.length === 0) return false;
+      return nameMatch && matchesTypes;
+    });
+  }, [pokemons, search, selectedTypes]);
 
-    const matchesTypes = selectedTypes.every((type) => pokemonTypes.includes(type));
-    return nameMatch && matchesTypes;
-  });
+  // Slice visible Pokémons for current page
+  const paginatedPokemons = useMemo(() => {
+    return filteredPokemons.slice(offset, offset + pokemonsPerPage);
+  }, [filteredPokemons, offset, pokemonsPerPage]);
 
-  // Show loading or error messages
-  if (error) {
-    return <FailedApiLoadError />;
-  }
+  const totalPages = Math.ceil(filteredPokemons.length / pokemonsPerPage);
 
-  if (pokemons.length === 0) {
-    return <ListSkeleton pokemonsPerPage={pokemonsPerPage} />;
-  }
-  // Main UI
+  // Loading and error handling
+  if (error) return <FailedApiLoadError />;
+  if (pokemons.length === 0) return <ListSkeleton pokemonsPerPage={pokemonsPerPage} />;
+
   return (
-    <div className='w-full relative mx-auto md:mt-32 mt-32   pb-32 max-w-[500px] 2xl:max-w-[1100px] lg:max-w-[700px]  text-center md:text-right '>
-      <span className='text-2xl '>{visiblePokemons.length} matching Pokemons found on this page</span>
-      <div className='flex   mt-6  md:h-[50px] text w-full  py-6 md:justify-between  md:items-center items-start px-12 md:px-0 md:mt-10 flex-col md:flex-row space-y-6'>
-        <div className='flex items-center space-x-4 '>
+    <div className='w-full relative mx-auto md:mt-32 mt-32 pb-32 max-w-[500px] 2xl:max-w-[1100px] lg:max-w-[700px] text-center md:text-right'>
+      {(search || !selectedTypes.includes("All types")) && (
+        <span className='text-2xl'>{filteredPokemons.length} matching Pokémons found</span>
+      )}
+
+      {/* Filter display and items-per-page selector */}
+      <div className='flex mt-6 md:h-[50px] w-full py-6 md:justify-between md:items-center items-start px-12 md:px-0 md:mt-10 flex-col md:flex-row space-y-6'>
+        <div className='flex items-center space-x-4'>
           <span>Selected:</span>
           {selectedTypes.map((pokemonType, index) => (
             <div className='relative' key={index}>
-              <span className='p-2  flex border rounded-md border-[var(--color-border)] text-[#525863] capitalize'>
+              <span className='p-2 flex border rounded-md border-[var(--color-border)] text-[#525863] capitalize'>
                 {pokemonType}
               </span>
               <button
                 onClick={() => setSelectedTypes((prev) => prev.filter((type) => type !== pokemonType))}
-                className='absolute -right-1 -top-1 w-[12px]  h-[12px] flex items-center justify-center bg-gray-200 rounded-full cursor-pointer'
+                className='absolute -right-1 -top-1 w-[12px] h-[12px] flex items-center justify-center bg-gray-200 rounded-full cursor-pointer'
               >
-                <img src={Close} alt='close' className=' w-[8px] h-[8px] ' />
+                <img src={Close} alt='close' className='w-[8px] h-[8px]' />
               </button>
             </div>
           ))}
@@ -98,18 +143,23 @@ const PokemonList = () => {
           value={pokemonsPerPage}
           onChange={(value) => {
             setPokemonsPerPage(value);
-            setCurrentPage(1);
+            setCurrentPage(1); // Reset to first page
           }}
+          maxAvailable={filteredPokemons.length}
         />
       </div>
-      <ul className='grid sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3  gap-10 mt-10 place-items-center  '>
-        {visiblePokemons.map((item, index) => (
+
+      {/* Pokémon cards */}
+      <ul className='grid sm:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-10 mt-10 place-items-center'>
+        {paginatedPokemons.map((item, index) => (
           <li key={index}>
-            <PokemonListCard pokemon={item} />
+            <PokemonListCard pokemon={item} index={index} />
           </li>
         ))}
       </ul>
-      {selectedTypes.length !== 0 && (
+
+      {/* Pagination only when something is selected and multiple pages exist */}
+      {selectedTypes.length !== 0 && totalPages > 1 && (
         <div className='mt-24'>
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
         </div>

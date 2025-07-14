@@ -1,9 +1,12 @@
 type Props = {
   value: number;
   onChange: (value: number) => void;
+  maxAvailable: number;
 };
 
-const PokemonPerPageSelect = ({value, onChange}: Props) => {
+const PokemonPerPageSelect = ({value, onChange, maxAvailable}: Props) => {
+  const options = [20, 40, 60, 80, 100];
+
   return (
     <div className='flex space-x-4 items-center'>
       <span>Per page:</span>
@@ -14,8 +17,8 @@ const PokemonPerPageSelect = ({value, onChange}: Props) => {
           onChange(parseInt(e.target.value));
         }}
       >
-        {[20, 40, 60, 80, 100].map((num) => (
-          <option key={num} value={num}>
+        {options.map((num) => (
+          <option key={num} value={num} disabled={num > maxAvailable}>
             {num}
           </option>
         ))}

@@ -8,6 +8,9 @@ type Props = {
 };
 
 const Pagination = ({currentPage, totalPages, onPageChange}: Props) => {
+  // Nie pokazuj w ogóle paginacji, jeśli tylko jedna strona
+  if (totalPages <= 1) return null;
+
   return (
     <div className='flex justify-center items-center space-x-4 my-8'>
       {/* Previous button */}
@@ -21,21 +24,25 @@ const Pagination = ({currentPage, totalPages, onPageChange}: Props) => {
           <SvgArrow />
         </div>
       </PaginationButton>
-      {/* Left Arrow */}
 
-      {/* First Page, always visible */}
+      {/* First Page */}
       <PaginationButton targetPage={1} currentPage={currentPage} onPageChange={onPageChange}>
         {1}
       </PaginationButton>
-      {/* Pages 2,3 visible only when current page is under 4 */}
-      {currentPage < 4 &&
-        [2, 3].map((page) => (
-          <PaginationButton key={page} targetPage={page} currentPage={currentPage} onPageChange={onPageChange}>
-            {page}
-          </PaginationButton>
-        ))}
-      {/* Current Page indicator shown on most of the pages */}
-      {currentPage >= 4 && currentPage < totalPages - 3 && (
+
+      {/* Środkowe strony — zależne od liczby stron */}
+      {totalPages > 4 &&
+        currentPage < 4 &&
+        [2, 3].map(
+          (page) =>
+            page < totalPages && (
+              <PaginationButton key={page} targetPage={page} currentPage={currentPage} onPageChange={onPageChange}>
+                {page}
+              </PaginationButton>
+            )
+        )}
+
+      {totalPages > 6 && currentPage >= 4 && currentPage < totalPages - 2 && (
         <>
           <span>...</span>
           <PaginationButton targetPage={currentPage} currentPage={currentPage} onPageChange={onPageChange}>
@@ -44,17 +51,24 @@ const Pagination = ({currentPage, totalPages, onPageChange}: Props) => {
           <span>...</span>
         </>
       )}
-      {/* Last 3 pages shown similar as first 3 */}
-      {currentPage > totalPages - 3 &&
-        [totalPages - 2, totalPages - 1].map((page) => (
-          <PaginationButton key={page} targetPage={page} currentPage={currentPage} onPageChange={onPageChange}>
-            {page}
-          </PaginationButton>
-        ))}
-      {/* Total pages always visible */}
-      <PaginationButton targetPage={totalPages} currentPage={currentPage} onPageChange={onPageChange}>
-        {totalPages}
-      </PaginationButton>
+
+      {totalPages > 4 &&
+        currentPage > totalPages - 3 &&
+        [totalPages - 2, totalPages - 1].map(
+          (page) =>
+            page > 1 && (
+              <PaginationButton key={page} targetPage={page} currentPage={currentPage} onPageChange={onPageChange}>
+                {page}
+              </PaginationButton>
+            )
+        )}
+
+      {/* Last Page */}
+      {totalPages > 1 && (
+        <PaginationButton targetPage={totalPages} currentPage={currentPage} onPageChange={onPageChange}>
+          {totalPages}
+        </PaginationButton>
+      )}
 
       {/* Next button */}
       <PaginationButton
